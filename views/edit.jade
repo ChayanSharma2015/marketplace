@@ -50,35 +50,35 @@ html
                       td(align='left')
                         font(color='black') Price: 
                       td(align='left')
-                        input(type='number', name='price', size='25', placeholder='INR' required)
+                        input(type='text', name='price', size='25', placeholder='INR' onkeypress='return isNumberKey(event)' required)
                     //tr
                       //td(align='left')
                         //font(color='black') Image: 
                       //td
-                        //input(type='file', name='img', accept='images/*' required)
+                        //input(type='file', name='img', accept='images/*')
                     tr
                       td
                       td
-                        input(type='submit', value='Publish Item ')
+                        input(type='submit', value='Publish Item')
         td(align='center', bgcolor='white', width='50%', style='vertical-align: top;')
           p(align='center', style="font-family: 'GILL',HELVETICA, sans-serif;color: green; font-size: larger;")
             | Welcome to 
             b New Marketplace.
-            | A unique online platform for all shoppers.
           p(align='center', style="font-family: 'GILL',HELVETICA, sans-serif; color: black; font-size:large ")
-            font(face='FUTURA MD BT', color='NAVY', size='5') New in Store
+            font(face='FUTURA MD BT', color='NAVY', size='5') Edit your item
           // ------------------------------ fetched code is here!---------------------------
-          ol(align='left')
-            each item in items
-              li
-                | 
-                b Title :
-                | #{item.title} 
-                b Type :
-                | #{item.type} 
-                b Description : 
-                | #{item.desc} 
-                b Price : 
-                | Rs#{item.price} 
-                a(href='deleteItem/#{item._id}')   Delete
-                a(href='modifyForm/#{item._id}')   Modify
+          form(method='post' action="/updateItem/#{item._id}")
+            b Title :
+            input(type='text',name ='title',value='#{item.title}') 
+            b Type :
+            input(type='text',name ='type',value='#{item.type}') 
+            b Description : 
+            input(type='text',name ='desc',value='#{item.desc}')
+            b Price : 
+            input(type='text',name ='price',value='#{item.price}') 
+            br
+            br
+            input(type='submit', value='Save')
+            br
+            br
+            a(href="/view") Back
