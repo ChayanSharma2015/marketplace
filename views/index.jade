@@ -2,14 +2,6 @@
 doctype html
 html
   head
-    title Marketplace
-    script(type='text/javascript').
-      function isNumberKey(evt){
-      var charCode = (evt.which) ? evt.which : evt.keyCode
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-      return false;
-      return true;
-      }
   body
     table(border='0', bgcolor='#808080', align='top', width='100%', style='height:90px')
       tr
@@ -21,46 +13,18 @@ html
           img(alt='', src='images/shop.jpg', width='180', height='90', align='right')
     table(align='left', width='100%', style='height:450px', border='0', bgcolor='#')
       tr
-        td(style=' font-family:verdana; height :580px; text-decoration: none;color:black ; font-size: large; ', bgcolor='verdana', width='5%', valign='top', align='center')
-          br
-          table(cellspacing='0.5', border='0', align='center', width='100%', bgcolor='FFFFFF', style='height: 130px', cellpadding='5')
-            tr
-              td(bgcolor='verdana')
-                font(color='black') Enter Your Product details here
-            tr
-              td(bgcolor='verdana')
-                form(name='ItemDetails', method='post', action='/new')
-                  table(border='0', align='center', width='100%', cellpadding='5')
-                    tr
-                      td(align='left')
-                        font(color='black') Title: 
-                      td(align='left')
-                        input(type='text', name='title', size='25' required)
-                    tr
-                      td(align='left')
-                        font(color='black') Type: 
-                      td(align='left')
-                        input(type='text', name='type', size='25' required)
-                    tr
-                      td(align='left')
-                        font(color='black') Description: 
-                      td(align='left')
-                        textarea(name='desc', rows='10', cols='27', placeholder='Describe your product' required)
-                    tr
-                      td(align='left')
-                        font(color='black') Price: 
-                      td(align='left')
-                        input(type='number', name='price', size='25', placeholder='INR' required)
-                    //tr
-                      //td(align='left')
-                        //font(color='black') Image: 
-                      //td
-                        //input(type='file', name='img', accept='images/*' required)
-                    tr
-                      td
-                      td
-                        input(type='submit', value='Publish Item ')
-        td(align='center', bgcolor='white', width='50%', style='vertical-align: top;')
+        td(align='center', bgcolor='white', width='100%', style='vertical-align: top;')
+          p(align='center', style="font-family: 'GILL',HELVETICA, sans-serif;color: green; font-size: larger;")
+            a(href='/marketplace.com') Home
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            a(href='/marketplace.com/login') Log In
+        td(align='center', bgcolor='white', width='100%')
+          font(style="font-family: 'SHOWCARD GOTHIC',sans-serif;", size='+2', color='black')
+            a(href='/marketplace.com/login') My Cart
+      tr
+        td(align='center', colspan='2' bgcolor='white', width='100%', style='vertical-align: top;')
           p(align='center', style="font-family: 'GILL',HELVETICA, sans-serif;color: green; font-size: larger;")
             | Welcome to 
             b New Marketplace.
@@ -68,17 +32,22 @@ html
           p(align='center', style="font-family: 'GILL',HELVETICA, sans-serif; color: black; font-size:large ")
             font(face='FUTURA MD BT', color='NAVY', size='5') New in Store
           // ------------------------------ fetched code is here!---------------------------
-          ol(align='left')
-            each item in items
-              li
-                | 
-                b Title :
-                | #{item.title} 
-                b Type :
-                | #{item.type} 
-                b Description : 
-                | #{item.desc} 
-                b Price : 
-                | Rs#{item.price} 
-                a(href='deleteItem/#{item._id}')   Delete
-                a(href='modifyForm/#{item._id}')   Modify
+          each item in items
+            .container
+              br
+              br
+              table.table(border="1 px solid" cellpadding="5px" cellspacing="5px" style="width:50% ;border-collapse: collapse;")
+                thead
+                  tr
+                    th Title
+                    th Type
+                    th Description
+                    th Price
+                    th(align='center' rowspan='2')
+                      a(href='addToCart/#{item._id}') Add to cart
+                tbody
+                  tr
+                    td #{item.title}
+                    td #{item.type}
+                    td #{item.desc}
+                    td #{item.price}

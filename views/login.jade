@@ -1,0 +1,42 @@
+        
+doctype html
+html
+  head
+  body
+    table(border='0', bgcolor='#808080', align='top', width='100%', style='height:90px')
+      tr
+        td(bgcolor='verdana', align='center')
+          font(style="font-family: 'SHOWCARD GOTHIC',sans-serif;", size='+4', color='black')
+            | The Marketplace
+        |                 
+        td(align='left', width='180')
+          img(alt='', src='images/shop.jpg', width='180', height='90', align='right')
+    table(align='left', width='100%', style='height:600px', border='0', bgcolor='#')
+      tr
+        td(align='center', bgcolor='white', width='100%', style='vertical-align: top; height:10px')
+          p(align='center', style="font-family: 'GILL',HELVETICA, sans-serif;color: green; font-size: larger;")
+            a(href='/marketplace.com') Home
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            a(href='/marketplace.com/login') Log In
+      tr
+        td(bgcolor='white', width='100%', style='vertical-align: top;')
+          div
+            div(style='margin-top:50px;')
+              div(style='background-color:#F7F7F7;border:1px solid #CCC;margin:0 auto;width:350px;height:350px;')
+                div(style='width:100px;margin:0 auto;padding-top:20px;')
+                  p(align='center')
+                    font(style="font-family: 'SHOWCARD GOTHIC',sans-serif;", size='+3', color='black') LOG IN
+                div(style='width:65%;margin:0 auto;')
+                  div(style='margin-top:25px;')
+                    form(method='post' action='/loginCheck')
+                      div
+                        input(type='text', style='padding:10px;font-size:18px;', size='20', name='username' placeholder='Enter user name/Email ID')
+                        input(type='password', style='padding:10px;font-size:18px;', size='20', name='password' placeholder='Enter password')
+                      div(style='margin-top:15px;')
+                        input(type='submit', value='Sign in', style='width:244px;height:40px;background-color:#06F;color:#FFF; font-family:Verdana, Geneva, sans-serif;font-size:18px;')
+                      div(style='margin-top:15px;')
+                        input(type='button', value='Create Acount',onclick="location.href='/marketplace.com';", style='width:244px;height:40px;background-color:#06F;color:#FFF;\
+                        font-family:Verdana, Geneva, sans-serif;font-size:18px;')
+

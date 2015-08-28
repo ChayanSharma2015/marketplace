@@ -3,6 +3,7 @@ var app = express();
 var mongoose = require('mongoose');
 var path = require('path');
 var bodyParser = require('body-parser');
+var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 
 app.use(express.static(__dirname + "public"));
 
@@ -12,6 +13,7 @@ app.set('view engine','jade');
 
 app.use(bodyParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 
 mongoose.connect('mongodb://localhost/marketplace');
 
@@ -24,6 +26,13 @@ var Item = new mongoose.Schema({ //DATABASE SCHEMA
 
 var item = mongoose.model('Items',Item);
 
+var Seller = new mongoose.Schema({
+	username : String,
+	password : String
+});
+
+var sellers = mongoose.model('Sellers',Seller);
+
 app.get('/marketplace.com',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
 	item.find({},function(err,docs){
 		if(err) res.json(err);
@@ -31,10 +40,21 @@ app.get('/marketplace.com',function(req,res){ //TO FETCH ALL THE DATA FROM DATAB
 	});
 });
 
+app.get('/marketplace.com/login',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+		res.render('login');
+});
+
+app.get('/marketplace.com/seller',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+	item.find({},function(err,docs){
+		if(err) res.json(err);
+		else res.render('seller', {items : docs});
+	});
+});
+
 app.get('/deleteItem/:id', function(req,res){ // TO DELETE AN ITEM FROM A PARTICULAR ID
 	item.remove({_id : req.params.id},function(err){
 		if(err) console.log(err);
-		else res.redirect('back');
+		else res.redirect('/marketplace.com/seller');
 	});
 });
 
@@ -45,6 +65,35 @@ app.get('/modifyForm/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PA
 	});
 });
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    sellers.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (user.password!==password) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+app.post('/loginCheck',passport.authenticate('local', { 
+	successRedirect: '/marketplace.com/seller',
+    failureRedirect: '/marketplace.com/login/invalid',
+    failureFlash: false })
+);
+
 app.post('/updateItem/:id', function(req,res){ //TO EDIT THE DETAILS,UPDATE THE DATABASE AND GO BACK TO HOME PAGE
 	item.update({_id : req.params.id},
 		{$set:{title : req.body.title,
@@ -52,14 +101,14 @@ app.post('/updateItem/:id', function(req,res){ //TO EDIT THE DETAILS,UPDATE THE 
 		 desc : req.body.desc,
 		price : req.body.price}},function(err,doc){
 		if(err) res.json(err);
-		else res.redirect('/marketplace.com');
+		else res.redirect('/marketplace.com/seller');
 	});
 });
 
 app.post('/new', function(req, res){ //TO REDIRECT TO HOME PAGE AFTER SAVING THE DATA INTO MONGO
 	new item(req.body).save(function(err,doc){
 		if(err) res.json(err);
-		else res.redirect('/marketplace.com');
+		else res.redirect('/marketplace.com/seller');
 	});
 });
 app.listen(3000);
