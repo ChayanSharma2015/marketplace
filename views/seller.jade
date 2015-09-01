@@ -66,24 +66,44 @@ html
             Hey Your products currently on sale are as follows :
           // ------------------------------ fetched code is here!---------------------------
           each item in items
-            .container
-              br
-              br
-              table.table(border="1 px solid" cellpadding="5px" cellspacing="5px" style="width:50% ;border-collapse: collapse;")
-                thead
-                  tr
-                    th Title
-                    th Type
-                    th Description
-                    th Price
-                tbody
-                  tr
-                    td #{item.title}
-                    td #{item.type}
-                    td #{item.desc}
-                    td #{item.price}
-                  tr
-                    td(align='center' colspan='2')
-                      a(href='/modifyForm/#{item._id}') Edit
-                    td(align='center' colspan='2')
-                      a(href='/deleteItem/#{item._id}') Delete
+            if item.sold == "sold"
+              .container
+                br
+                br
+                table.table(border="1 px solid" cellpadding="5px" cellspacing="5px" style="width:50% ;border-collapse: collapse;")
+                  thead
+                    tr
+                      th Title
+                      th Type
+                      th Description
+                      th Price(INR)
+                      th(bgcolor="red") Item Sold!
+                  tbody
+                    tr
+                      td #{item.title}
+                      td #{item.type}
+                      td #{item.desc}
+                      td #{item.price}
+          each item in items
+            if item.sold == null
+              .container
+                br
+                br
+                table.table(border="1 px solid" cellpadding="5px" cellspacing="5px" style="width:50% ;border-collapse: collapse;")
+                  thead
+                    tr
+                      th Title
+                      th Type
+                      th Description
+                      th Price(INR)
+                  tbody
+                    tr
+                      td #{item.title}
+                      td #{item.type}
+                      td #{item.desc}
+                      td #{item.price}
+                    tr
+                      td(align='center' colspan='2')
+                        a(href='/modifyForm/#{item._id}') Edit
+                      td(align='center' colspan='2')
+                        a(href='/deleteItem/#{item._id}') Delete

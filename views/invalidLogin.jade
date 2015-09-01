@@ -24,7 +24,7 @@ html
         td(bgcolor='white', width='100%', style='vertical-align: top;')
           div
             div(style='margin-top:50px;')
-              div(style='background-color:#F7F7F7;border:1px solid #CCC;margin:0 auto;width:350px;height:350px;')
+              div(style='background-color:#F7F7F7;border:1px solid #CCC;margin:0 auto;width:350px;height:390px;')
                 div(style='width:100px;margin:0 auto;padding-top:20px;')
                   p(align='center')
                     font(style="font-family: 'SHOWCARD GOTHIC',sans-serif;", size='+3', color='black') LOG IN
@@ -32,8 +32,11 @@ html
                   div(style='margin-top:25px;')
                     form(method='post' action='/loginCheck')
                       div
-                        input(type='text', style='padding:10px;font-size:18px;', size='20', name='username' placeholder='Enter user name/Email ID')
+                        input(type='text', style='padding:10px;font-size:18px;', size='20', name='username' placeholder='Enter Username/Email ID')
                         input(type='password', style='padding:10px;font-size:18px;', size='20', name='password' placeholder='Enter password')
+                        p
+                          font(style="font-family: 'GILL',HELVETICA, sans-serif;", size='+0.5', color='red')
+                            Error  Invalid Username/Password. Please try again.
                       div(style='margin-top:15px;')
                         input(type='submit', value='Sign in', style='width:244px;height:40px;background-color:#06F;color:#FFF; font-family:Verdana, Geneva, sans-serif;font-size:18px;')
                       div(style='margin-top:15px;')

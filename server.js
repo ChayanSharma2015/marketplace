@@ -21,7 +21,8 @@ var Item = new mongoose.Schema({ //DATABASE SCHEMA
 	title : String,
 	type  : String,
 	desc  : String,	
-	price : Number
+	price : String,
+	sold  : String
 });
 
 var item = mongoose.model('Items',Item);
@@ -33,6 +34,58 @@ var Seller = new mongoose.Schema({
 
 var sellers = mongoose.model('Sellers',Seller);
 
+var CartItem = new mongoose.Schema({
+	title : String,
+	type  : String,
+	desc  : String,	
+	price : String,
+	sold  : String
+});
+
+var cartItems = mongoose.model('CartItems',CartItem);
+
+app.get('/addToCart/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAGE TO EDIT IT
+	item.findById(req.params.id,function(err,docs){
+		new cartItems(docs).save(function(err,docs){
+			if(err) res.json(err);
+			else res.redirect('/marketplace.com');
+		});
+	});
+});
+
+app.get('/marketplace.com/myCart',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+	cartItems.find({},function(err,docs){
+		if(err) res.json(err);
+		else res.render('myCart', {cartitems : docs}); 
+	});
+});
+
+app.get('/soldItem/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAGE TO EDIT IT
+	cartItems.findById(req.params.id,function(err,doc){
+		cartItems.update({_id : req.params.id},
+		{$set:{sold : 'sold'}},function(err,doc){
+		 	if(err) res.json(err);
+		 	else
+			item.update({_id : req.params.id},
+			{$set:{sold : 'sold'}},function(err,doc){
+				if(err) res.json(err);
+				else res.redirect('/marketplace.com/myCart');
+			});
+		});
+	});
+});
+
+app.get('/marketplace.com/myCart/sold',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+		res.render('sold');
+});
+
+app.get('/removeFromCart/:id',function(req,res){
+	cartItems.remove({_id : req.params.id},function(err){
+		if(err) console.log(err);
+		else res.redirect('/marketplace.com/myCart')
+	});
+});
+
 app.get('/marketplace.com',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
 	item.find({},function(err,docs){
 		if(err) res.json(err);
@@ -42,6 +95,10 @@ app.get('/marketplace.com',function(req,res){ //TO FETCH ALL THE DATA FROM DATAB
 
 app.get('/marketplace.com/login',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
 		res.render('login');
+});
+
+app.get('/marketplace.com/login/invalid',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+		res.render('invalidLogin');
 });
 
 app.get('/marketplace.com/seller',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
