@@ -44,7 +44,7 @@ var CartItem = new mongoose.Schema({
 
 var cartItems = mongoose.model('CartItems',CartItem);
 
-app.get('/addToCart/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAGE TO EDIT IT
+app.get('/addToCart/:id',function(req,res){  // TO ADD THE ITEMS TO MY CART PAGE AND CARTITEMS COLLECTION
 	item.findById(req.params.id,function(err,docs){
 		new cartItems(docs).save(function(err,docs){
 			if(err) res.json(err);
@@ -53,14 +53,14 @@ app.get('/addToCart/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAG
 	});
 });
 
-app.get('/marketplace.com/myCart',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+app.get('/marketplace.com/myCart',function(req,res){ //TO FETCH ALL THE ITEMS FROM CARTITEMS COLLECTION AND DISPLAY ON MY CART PAGE
 	cartItems.find({},function(err,docs){
 		if(err) res.json(err);
 		else res.render('myCart', {cartitems : docs}); 
 	});
 });
 
-app.get('/soldItem/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAGE TO EDIT IT
+app.get('/soldItem/:id',function(req,res){  // TO UPDATE THE ITEMS COLLECTION AND CART ITEMS COLLECTION ONCE THE ITEM IS SOLD 
 	cartItems.findById(req.params.id,function(err,doc){
 		cartItems.update({_id : req.params.id},
 		{$set:{sold : 'sold'}},function(err,doc){
@@ -75,11 +75,7 @@ app.get('/soldItem/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAGE
 	});
 });
 
-app.get('/marketplace.com/myCart/sold',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
-		res.render('sold');
-});
-
-app.get('/removeFromCart/:id',function(req,res){
+app.get('/removeFromCart/:id',function(req,res){ //TO REMOVE AN ITEM FROM CART
 	cartItems.remove({_id : req.params.id},function(err){
 		if(err) console.log(err);
 		else res.redirect('/marketplace.com/myCart')
@@ -93,22 +89,22 @@ app.get('/marketplace.com',function(req,res){ //TO FETCH ALL THE DATA FROM DATAB
 	});
 });
 
-app.get('/marketplace.com/login',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+app.get('/marketplace.com/login',function(req,res){ //TO REDIRECT TO LOGIN PAGE
 		res.render('login');
 });
 
-app.get('/marketplace.com/login/invalid',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+app.get('/marketplace.com/login/invalid',function(req,res){ //TO REDIRECT TO INVALID LOGIN PAGE WHEN ENTERED WRONG ID/PASSWORD
 		res.render('invalidLogin');
 });
 
-app.get('/marketplace.com/seller',function(req,res){ //TO FETCH ALL THE DATA FROM DATABASE AND DISPLAY ON HOME PAGE
+app.get('/marketplace.com/seller',function(req,res){ //TO FETCH ALL ITEMS FROM COLLECTION AND DISPLAY ON SELLER'S PROFILE PAGE
 	item.find({},function(err,docs){
 		if(err) res.json(err);
 		else res.render('seller', {items : docs});
 	});
 });
 
-app.get('/deleteItem/:id', function(req,res){ // TO DELETE AN ITEM FROM A PARTICULAR ID
+app.get('/deleteItem/:id', function(req,res){ // TO DELETE AN ITEM OF A PARTICULAR ID FROM ITEMS COLLECTION 
 	item.remove({_id : req.params.id},function(err){
 		if(err) console.log(err);
 		else res.redirect('/marketplace.com/seller');
@@ -145,7 +141,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-app.post('/loginCheck',passport.authenticate('local', { 
+app.post('/loginCheck',passport.authenticate('local', { //TO REDIRECT TO SUCCESS PAGE OR FAILURE PAGE AFTER AUTHENTICATION
 	successRedirect: '/marketplace.com/seller',
     failureRedirect: '/marketplace.com/login/invalid',
     failureFlash: false })
