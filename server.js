@@ -111,7 +111,7 @@ app.get('/deleteItem/:id', function(req,res){ // TO DELETE AN ITEM OF A PARTICUL
 	});
 });
 
-app.get('/modifyForm/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAGE TO EDIT IT
+app.get('/modifyItem/:id',function(req,res){  // TO RENDER THE DATA TO MODIFY PAGE TO EDIT IT
 	item.findById(req.params.id,function(err,doc){
 		if(err) console.log(err);
 		else res.render('edit',{item : doc});
